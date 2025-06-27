@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { FaCalendarAlt, FaCog } from "react-icons/fa";
+import { FaCalendarAlt, FaCog, FaUser, FaBuilding } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import { MdLogout } from "react-icons/md";
 
-const Header = () => {
+const Header = ({ onLogout }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRefs = {
     events: useRef(null),
@@ -126,14 +126,31 @@ const Header = () => {
               onClick={() => toggleDropdown("profile")}
             />
             {openDropdown === "profile" && (
-              <div className="absolute right-0 mt-2 bg-white shadow-lg border rounded w-44">
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100">Profile</a>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100 flex items-center gap-2">
-                  <FaCog /> Settings
-                </a>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100 text-red-500 flex items-center gap-2">
+              <div className="absolute right-0 mt-2 bg-white shadow-lg border rounded w-48">
+                <button 
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
+                  onClick={() => setOpenDropdown(null)}
+                >
+                  <FaUser /> My Profile
+                </button>
+                <button 
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
+                  onClick={() => setOpenDropdown(null)}
+                >
+                  <FaBuilding /> My Organisation
+                </button>
+                <hr className="my-1" />
+                <button 
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500 flex items-center gap-2"
+                  onClick={() => {
+                    setOpenDropdown(null);
+                    if (onLogout) {
+                      onLogout();
+                    }
+                  }}
+                >
                   <MdLogout /> Logout
-                </a>
+                </button>
               </div>
             )}
           </div>
