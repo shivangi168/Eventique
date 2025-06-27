@@ -4,6 +4,7 @@ import EventCard from './EventCard';
 const EventsSection = () => {
   const [activeTimeFilter, setActiveTimeFilter] = useState('All');
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('All');
+  const [showAllEvents, setShowAllEvents] = useState(false);
 
   const timeFilters = [
     'All', 'Today', 'Tomorrow', 'This Week', 'This Weekend', 
@@ -18,7 +19,7 @@ const EventsSection = () => {
   ];
 
   // Sample event data
-  const events = [
+  const allEvents = [
     {
       id: 1,
       title: 'A New Way Of Life',
@@ -101,8 +102,54 @@ const EventsSection = () => {
       date: '20 Jul',
       time: 'Wed, 11:30 PM',
       duration: '12h'
+    },
+    // Additional events for "See More" functionality
+    {
+      id: 9,
+      title: 'Digital Marketing Masterclass',
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2015&q=80',
+      price: '150.00',
+      currency: 'AUD',
+      remainingTickets: 12,
+      date: '25 Jul',
+      time: 'Mon, 9:00 AM',
+      duration: '4h'
+    },
+    {
+      id: 10,
+      title: 'Yoga and Mindfulness Retreat',
+      image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2020&q=80',
+      price: '80.00',
+      currency: 'AUD',
+      remainingTickets: 20,
+      date: '30 Jul',
+      time: 'Sat, 7:00 AM',
+      duration: '6h'
+    },
+    {
+      id: 11,
+      title: 'Food and Wine Festival',
+      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+      price: '45.00',
+      currency: 'AUD',
+      remainingTickets: 50,
+      date: '5 Aug',
+      time: 'Fri, 5:00 PM',
+      duration: '5h'
+    },
+    {
+      id: 12,
+      title: 'Tech Startup Pitch Night',
+      image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+      isFree: true,
+      date: '10 Aug',
+      time: 'Wed, 6:30 PM',
+      duration: '3h'
     }
   ];
+
+  // Display only first 8 events initially, all events when showAllEvents is true
+  const events = showAllEvents ? allEvents : allEvents.slice(0, 8);
 
   return (
     <section className="py-12 bg-gray-50">
@@ -119,7 +166,7 @@ const EventsSection = () => {
                 onClick={() => setActiveTimeFilter(filter)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   activeTimeFilter === filter
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white'
                     : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                 }`}
               >
@@ -138,7 +185,7 @@ const EventsSection = () => {
                 onClick={() => setActiveCategoryFilter(filter)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   activeCategoryFilter === filter
-                    ? 'bg-green-500 text-white'
+                    ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white'
                     : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                 }`}
               >
@@ -155,11 +202,23 @@ const EventsSection = () => {
           ))}
         </div>
 
-        {/* Browse All Button */}
+        {/* See More Button */}
         <div className="text-center">
-          <button className="bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-8 rounded-lg transition-colors">
-            Browse All
-          </button>
+          {!showAllEvents ? (
+            <button 
+              onClick={() => setShowAllEvents(true)}
+              className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              See More
+            </button>
+          ) : (
+            <button 
+              onClick={() => setShowAllEvents(false)}
+              className="bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-medium py-3 px-8 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              Show Less
+            </button>
+          )}
         </div>
       </div>
     </section>

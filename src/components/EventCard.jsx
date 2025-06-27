@@ -27,7 +27,7 @@ const EventCard = ({ event }) => {
           className="w-full h-48 object-cover"
         />
         {/* Bookmark Icon */}
-        <button className="absolute top-3 right-3 bg-green-500 hover:bg-green-600 text-white p-2 rounded-full transition-colors">
+        <button className="absolute top-3 right-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white p-2 rounded-full transition-all duration-200 shadow-md hover:shadow-lg">
           <FaBookmark size={16} />
         </button>
       </div>
