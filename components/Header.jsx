@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useRef } from "react";
 import { FaCalendarAlt, FaCog, FaUser, FaBuilding } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";

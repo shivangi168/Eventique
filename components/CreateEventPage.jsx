@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import { FaVideo, FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa';
 
