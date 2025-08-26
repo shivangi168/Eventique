@@ -11,6 +11,17 @@ import (
 
 type EventsRepo struct{ DB *sql.DB }
 
+// EventsRepository defines the contract required by handlers.
+// Both the DB-backed repo and the in-memory repo implement this.
+type EventsRepository interface {
+    CreateEvent(ctx context.Context, e *models.Event) (string, error)
+    UpdateEvent(ctx context.Context, id string, e *models.Event) error
+    UpsertTickets(ctx context.Context, t *models.EventTickets) error
+    AddImages(ctx context.Context, eventID string, paths []string) error
+    ListEvents(ctx context.Context) ([]models.Event, error)
+    GetEvent(ctx context.Context, id string) (*models.Event, error)
+}
+
 func NewEventsRepo(db *sql.DB) *EventsRepo { return &EventsRepo{DB: db} }
 
 func (r *EventsRepo) CreateEvent(ctx context.Context, e *models.Event) (string, error) {
