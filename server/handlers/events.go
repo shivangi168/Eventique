@@ -21,7 +21,7 @@ import (
 )
 
 type EventsHandler struct {
-	Repo      storage.EventsRepository
+	Repo      *storage.EventsRepo
 	UploadDir string
 	BaseURL   string
 }
@@ -108,9 +108,6 @@ func (h *EventsHandler) listEvents(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		utils.Error(w, http.StatusInternalServerError, "db error")
 		return
-	}
-	if out == nil {
-		out = []models.Event{}
 	}
 	utils.JSON(w, http.StatusOK, out)
 }

@@ -12,7 +12,6 @@ import (
 	"github.com/joho/godotenv"
 
 	"Eventique/handlers"
-	"Eventique/storage"
 )
 
 func main() {
@@ -47,15 +46,15 @@ func main() {
 	_ = os.MkdirAll(uploadDir, 0755)
 	r.Handle("/uploads/*", http.StripPrefix("/uploads/", http.FileServer(http.Dir(uploadDir))))
 
-	// Events API (in-memory repo for no-db mode)
-	memRepo := storage.NewEventsMemoryRepo()
-	events := &handlers.EventsHandler{
-		Repo:      memRepo,
-		UploadDir: uploadDir,
-		BaseURL:   "",
-	}
+	// Dummy API routes for testing (you can expand these)
 	r.Route("/api", func(api chi.Router) {
-		events.Routes(api)
+		api.Get("/events", func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte(`[
+				{"id":1, "name":"Mock Event 1"},
+				{"id":2, "name":"Mock Event 2"}
+			]`))
+		})
 	})
 
 	// Start the server with timeouts to avoid abrupt resets
