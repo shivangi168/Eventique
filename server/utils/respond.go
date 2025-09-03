@@ -8,7 +8,7 @@ import (
 func JSON(w http.ResponseWriter, code int, v any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	_ = json.NewEncoder(w).Encode(v)
+	json.NewEncoder(w).Encode(v)
 }
 
 func Error(w http.ResponseWriter, code int, msg string) {

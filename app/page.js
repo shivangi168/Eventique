@@ -6,6 +6,7 @@ import LoginPage from './login/page'
 import SignUpPage from './signup/page'
 import DiscoverEventsPage from './discover-events/page'
 import CreateEventPage from './create-event/page'
+import VenueCreatePage from './create-event/venue/page'
 
 export default function RootPage() {
   const [currentPage, setCurrentPage] = useState('login') // Start with login page
@@ -28,6 +29,10 @@ export default function RootPage() {
 
   const navigateToCreateEvent = () => {
     setCurrentPage('create-event')
+  }
+
+  const navigateToCreateVenue = () => {
+    setCurrentPage('create-venue')
   }
 
   const handleLogout = () => {
@@ -58,6 +63,15 @@ export default function RootPage() {
             onLogout={handleLogout} 
             onExploreEvents={navigateToDiscoverEvents} 
             onCreateEvent={navigateToCreateEvent} 
+            onCreateVenue={navigateToCreateVenue}
+          />
+        )
+      case 'create-venue':
+        return (
+          <VenueCreatePage 
+            onLogout={handleLogout}
+            onExploreEvents={navigateToDiscoverEvents}
+            onCreateEvent={navigateToCreateEvent}
           />
         )
       case 'signup':

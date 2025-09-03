@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
-import { auth } from "././lib/firebase";
+import { auth } from "../app/lib/firebase";
+
+// import { auth } from "././lib/firebase";
 
 // import { auth } from "@/firebase"; // adjust path if needed
 import { 

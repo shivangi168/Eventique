@@ -4,10 +4,10 @@ import Header from '../../components/Header'
 import DiscoverEventsPage from '../../components/DiscoverEventsPage'
 import Footer from '../../components/Footer'
 
-export default function DiscoverEvents({ onLogout, onExploreEvents, onCreateEvent }) {
+export default function DiscoverEvents({ onLogout, onExploreEvents, onCreateEvent , onCreateVenue }) {
   return (
     <div>
-      <Header onLogout={onLogout} onExploreEvents={onExploreEvents} onCreateEvent={onCreateEvent} />
+      <Header onLogout={onLogout} onExploreEvents={onExploreEvents} onCreateEvent={onCreateEvent} onCreateVenue={onCreateVenue} />
       <DiscoverEventsPage />
       <Footer />
     </div>

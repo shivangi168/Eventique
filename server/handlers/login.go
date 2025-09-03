@@ -13,9 +13,18 @@ type LoginRequest struct {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
+    // Set response headers
+    w.Header().Set("Content-Type", "application/json")
+    
     var loginReq LoginRequest
     if err := json.NewDecoder(r.Body).Decode(&loginReq); err != nil {
-        utils.Error(w, http.StatusBadRequest, "invalid JSON")
+        utils.Error(w, http.StatusBadRequest, "Invalid JSON format")
+        return
+    }
+
+    // Basic validation
+    if loginReq.Email == "" || loginReq.Password == "" {
+        utils.Error(w, http.StatusBadRequest, "Email and password are required")
         return
     }
 

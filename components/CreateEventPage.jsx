@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { FaVideo, FaMapMarkerAlt, FaArrowRight } from 'react-icons/fa';
+import { FiChevronDown } from "react-icons/fi";
 
-const CreateEventPage = () => {
+
+const CreateEventPage = ({ onCreateVenue }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-blue-50 to-teal-100 relative overflow-hidden">
       {/* Geometric Pattern Background */}
@@ -72,17 +74,31 @@ const CreateEventPage = () => {
                   <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center mx-auto mb-6">
                     <FaMapMarkerAlt className="w-8 h-8 text-purple-600" />
                   </div>
+                   <button
+                                  onClick={() => {
+                                    // toggleDropdown("events");
+                                    if (onCreateVenue) onCreateVenue();
+                                  }}
+                                  className="flex items-center gap-1 hover:text-purple-600"
+                                >
+                                  Explore Events <FiChevronDown />
+                                </button>
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                    Create a Venue Event
+
+                    
+                    
+
+
+                    Create a Venue Eventtttttttttttttttttttttttttttt
                   </h2>
                   <p className="text-gray-600 leading-relaxed">
-                    Organize in-person events at physical venues. Perfect for 
+                    Organize in-person events at physical venueooooooooooooooooooooooos. Perfect for 
                     conferences, workshops, concerts, and networking events. 
                     Manage registrations and ticket sales effortlessly.
                   </p>
                 </div>
                 
-                <button className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
+                <button onClick={onCreateVenue} className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
                   Create
                   <FaArrowRight className="ml-2 w-4 h-4" />
                 </button>

@@ -6,7 +6,7 @@ import { FiChevronDown } from "react-icons/fi";
 
 import { MdLogout } from "react-icons/md";
 
-const Header = ({ onLogout, onExploreEvents, onCreateEvent }) => {
+const Header = ({ onLogout, onExploreEvents, onCreateEvent , onCreateVenue }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRefs = {
     events: useRef(null),
@@ -67,7 +67,14 @@ const Header = ({ onLogout, onExploreEvents, onCreateEvent }) => {
                 >
                   Explore Events
                 </button>
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100">Venue Event Detail View</a>
+                <a href="#" className="block px-4 py-2 hover:bg-gray-100"
+
+                onClick={() =>{
+                  onCreateVenue();
+                  setOpenDropdown(null);
+                }}
+                
+                >Venue Event Detail Viewhhhhhhhhhhhhhhhhhhh</a>
                 <a href="#" className="block px-4 py-2 hover:bg-gray-100">Online Event Detail View</a>
               </div>
             )}
