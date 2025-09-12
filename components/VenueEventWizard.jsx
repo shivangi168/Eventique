@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useMemo, useState } from 'react'
-import { apiFetch } from '../app/utils/api'
+import { apiFetch, apiUpload } from '../app/utils/api'
+import axios from 'axios'
 
 const Stepper = ({ step }) => {
   const steps = ['Details', 'Tickets', 'Settings']
@@ -41,32 +42,76 @@ export default function VenueEventWizard() {
 
   const canNextDetails = useMemo(() => details.name && Number(details.durationMinutes) > 0 && details.startsAt, [details])
 
-  const submitDetails = async () => {
-    setLoading(true); setError('')
-    try {
-      const payload = {
-        name: details.name,
-        category: details.category,
-        startsAt: new Date(details.startsAt).toISOString(),
-        durationMinutes: Number(details.durationMinutes),
-        description: details.description,
-        addressLine1: details.addressLine1,
-        addressLine2: details.addressLine2,
-        country: details.country,
-        state: details.state,
-        city: details.city,
-        postalCode: details.postalCode,
-        latitude: details.latitude === '' ? null : Number(details.latitude),
-        longitude: details.longitude === '' ? null : Number(details.longitude),
-        tags: details.tags ? details.tags.split(',').map(s => s.trim()).filter(Boolean) : []
-      }
-      const res = await apiFetch('/api/events', { method: 'POST', body: JSON.stringify(payload) })
-      setEventId(res.id)
-      setStep(2)
-    } catch (e) {
-      setError(e.message || 'Failed to create')
-    } finally { setLoading(false) }
+
+
+const submitDetails = async () => {
+  console.log("Submitting details... callled with details:", details);
+  setLoading(true);
+  setError("");
+  setStep(2);
+
+  try {
+    const payload = {
+      name: details.name,
+      category: details.category,
+      startsAt: new Date(details.startsAt).toISOString(),
+      durationMinutes: Number(details.durationMinutes),
+      description: details.description,
+      addressLine1: details.addressLine1,
+      addressLine2: details.addressLine2,
+      country: details.country,
+      state: details.state,
+      city: details.city,
+      postalCode: details.postalCode,
+      latitude: details.latitude === "" ? null : Number(details.latitude),
+      longitude: details.longitude === "" ? null : Number(details.longitude),
+      tags: details.tags
+        ? details.tags.split(",").map((s) => s.trim()).filter(Boolean)
+        : [],
+    };
+
+    const res = await axios.post("http://localhost:3001/api/events", payload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    setEventId(res.data.id);
+    setStep(2);
+  } catch (e) {
+    setError(e.response?.data?.message || e.message || "Failed to create");
+  } finally {
+    setLoading(false);
   }
+};
+
+
+  // const submitDetails = async () => {
+  //   setLoading(true); setError('')
+  //   try {
+  //     const payload = {
+  //       name: details.name,
+  //       category: details.category,
+  //       startsAt: new Date(details.startsAt).toISOString(),
+  //       durationMinutes: Number(details.durationMinutes),
+  //       description: details.description,
+  //       addressLine1: details.addressLine1,
+  //       addressLine2: details.addressLine2,
+  //       country: details.country,
+  //       state: details.state,
+  //       city: details.city,
+  //       postalCode: details.postalCode,
+  //       latitude: details.latitude === '' ? null : Number(details.latitude),
+  //       longitude: details.longitude === '' ? null : Number(details.longitude),
+  //       tags: details.tags ? details.tags.split(',').map(s => s.trim()).filter(Boolean) : []
+  //     }
+  //     const res = await apiFetch('/api/events', { method: 'POST', body: JSON.stringify(payload) })
+  //     setEventId(res.id)
+  //     setStep(2)
+  //   } catch (e) {
+  //     setError(e.message || 'Failed to create')
+  //   } finally { setLoading(false) }
+  // }
 
   const submitTickets = async () => {
     setLoading(true); setError('')
@@ -78,7 +123,7 @@ export default function VenueEventWizard() {
         groupDiscountPercent: tickets.groupDiscountPercent === '' ? null : Number(tickets.groupDiscountPercent),
         discountEndsAt: tickets.discountEndsAt ? new Date(tickets.discountEndsAt).toISOString() : null
       }
-      await apiFetch(`/events/${eventId}/tickets`, { method: 'POST', body: JSON.stringify(payload) })
+      await apiFetch(`/api/events/${eventId}/tickets`, { method: 'POST', body: JSON.stringify(payload) })
       setStep(3)
     } catch (e) { setError(e.message || 'Failed to save tickets') } finally { setLoading(false) }
   }
@@ -89,16 +134,7 @@ export default function VenueEventWizard() {
     try {
       const fd = new FormData()
       images.forEach(f => fd.append('images', f))
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events/${eventId}/images`, {
-        method: 'POST',
-        body: fd,
-      }).then(async res => {
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}))
-          throw new Error(err.error || `HTTP ${res.status}`)
-        }
-        return res.json()
-      })
+      await apiUpload(`/api/events/${eventId}/images`, fd)
       setStep(3)
     } catch (e) { setError(e.message || 'Failed to upload images') } finally { setLoading(false) }
   }

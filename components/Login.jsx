@@ -74,7 +74,7 @@ export default function BarrenLogin({ onLogin, onSignUp }) {
           </div>
           
           <h1 className="text-4xl font-bold leading-tight mb-8">
-            The Easiest Way to Create Events and Sell More Tickets Online
+            The Easiest Way to Create Events and Sell More Tickets Onlinennnnnnnnnnnnnnnnnnnn
           </h1>
         </div>
       </div>
