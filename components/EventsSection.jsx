@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import EventCard from './EventCard';
 
-const EventsSection = () => {
+const EventsSection = ({ onEventClick }) => {
   const [activeTimeFilter, setActiveTimeFilter] = useState('All');
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('All');
   const [showAllEvents, setShowAllEvents] = useState(false);
@@ -198,7 +198,13 @@ const EventsSection = () => {
         {/* Events Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
           {events.map((event) => (
-            <EventCard key={event.id} event={event} />
+            <div 
+              key={event.id} 
+              onClick={() => onEventClick && onEventClick(event)}
+              className="cursor-pointer"
+            >
+              <EventCard event={event} />
+            </div>
           ))}
         </div>
 

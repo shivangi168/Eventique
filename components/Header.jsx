@@ -6,7 +6,7 @@ import { FiChevronDown } from "react-icons/fi";
 
 import { MdLogout } from "react-icons/md";
 
-const Header = ({ onLogout, onExploreEvents, onCreateEvent , onCreateVenue }) => {
+const Header = ({ onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLogin, onSignUp, onNavigateToPricing }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRefs = {
     events: useRef(null),
@@ -81,7 +81,14 @@ const Header = ({ onLogout, onExploreEvents, onCreateEvent , onCreateVenue }) =>
           </div>
 
           {/* Pricing */}
-          <a href="#" className="hover:text-purple-600">Pricing</a>
+          <button 
+            onClick={() => {
+              if (onNavigateToPricing) onNavigateToPricing();
+            }}
+            className="hover:text-purple-600"
+          >
+            Pricing
+          </button>
 
           {/* Blog Dropdown */}
           <div ref={dropdownRefs.blog} className="relative">
@@ -150,8 +157,24 @@ const Header = ({ onLogout, onExploreEvents, onCreateEvent , onCreateVenue }) =>
                 </div>
                 <div className="px-4 py-3">
                   <div className="space-y-1">
-                    <a href="#" className="block px-2 py-1 text-sm hover:bg-gray-50 rounded">Sign In</a>
-                    <a href="#" className="block px-2 py-1 text-sm hover:bg-gray-50 rounded">Sign Up</a>
+                    <button 
+                      onClick={() => {
+                        setOpenDropdown(null);
+                        if (onLogin) onLogin();
+                      }}
+                      className="w-full text-left px-2 py-1 text-sm hover:bg-gray-50 rounded"
+                    >
+                      Sign In
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setOpenDropdown(null);
+                        if (onSignUp) onSignUp();
+                      }}
+                      className="w-full text-left px-2 py-1 text-sm hover:bg-gray-50 rounded"
+                    >
+                      Sign Up
+                    </button>
                     <a href="#" className="block px-2 py-1 text-sm hover:bg-gray-50 rounded">Forgot Password</a>
                     <a href="#" className="block px-2 py-1 text-sm hover:bg-gray-50 rounded">About Us</a>
                     <a href="#" className="block px-2 py-1 text-sm hover:bg-gray-50 rounded">Checkout</a>

@@ -1,11 +1,54 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaBookmark, FaShare, FaMapMarkerAlt, FaCalendarAlt, FaClock, FaUser, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const EventDetailPage = ({ event, onLogout, onExploreEvents, onCreateEvent, onCreateVenue }) => {
+const EventDetailPage = ({ event, onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onNavigateToCheckout }) => {
   const [ticketQuantity, setTicketQuantity] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [countdown, setCountdown] = useState({
+    days: 252,
+    hours: 2,
+    minutes: 56,
+    seconds: 5
+  });
+
+  // Countdown timer effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown(prev => {
+        let { days, hours, minutes, seconds } = prev;
+        
+        if (seconds > 0) {
+          seconds--;
+        } else if (minutes > 0) {
+          minutes--;
+          seconds = 59;
+        } else if (hours > 0) {
+          hours--;
+          minutes = 59;
+          seconds = 59;
+        } else if (days > 0) {
+          days--;
+          hours = 23;
+          minutes = 59;
+          seconds = 59;
+        } else {
+          // Reset countdown when it reaches 0
+          return {
+            days: 252,
+            hours: 2,
+            minutes: 56,
+            seconds: 5
+          };
+        }
+        
+        return { days, hours, minutes, seconds };
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Sample event data - in real app this would come from props or API
   const eventData = event || {
@@ -82,7 +125,9 @@ const EventDetailPage = ({ event, onLogout, onExploreEvents, onCreateEvent, onCr
   const handleBookNow = () => {
     if (ticketQuantity > 0) {
       console.log(`Booking ${ticketQuantity} tickets for ${eventData.title}`);
-      // Handle booking logic
+      if (onNavigateToCheckout) {
+        onNavigateToCheckout(eventData, ticketQuantity);
+      }
     }
   };
 
@@ -201,19 +246,19 @@ const EventDetailPage = ({ event, onLogout, onExploreEvents, onCreateEvent, onCr
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Event Countdown</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-purple-600 text-white p-3 rounded-lg text-center">
-                    <div className="text-2xl font-bold">252</div>
+                    <div className="text-2xl font-bold">{countdown.days}</div>
                     <div className="text-xs">DAYS</div>
                   </div>
                   <div className="bg-purple-600 text-white p-3 rounded-lg text-center">
-                    <div className="text-2xl font-bold">3</div>
+                    <div className="text-2xl font-bold">{countdown.hours}</div>
                     <div className="text-xs">HOURS</div>
                   </div>
                   <div className="bg-purple-600 text-white p-3 rounded-lg text-center">
-                    <div className="text-2xl font-bold">29</div>
+                    <div className="text-2xl font-bold">{countdown.minutes}</div>
                     <div className="text-xs">MINUTES</div>
                   </div>
                   <div className="bg-purple-600 text-white p-3 rounded-lg text-center">
-                    <div className="text-2xl font-bold">13</div>
+                    <div className="text-2xl font-bold">{countdown.seconds}</div>
                     <div className="text-xs">SECONDS</div>
                   </div>
                 </div>

@@ -77,6 +77,7 @@ const submitDetails = async () => {
     });
 
     setEventId(res.data.id);
+    console.log("created event", res.data.id);
     setStep(2);
   } catch (e) {
     setError(e.response?.data?.message || e.message || "Failed to create");
@@ -113,31 +114,91 @@ const submitDetails = async () => {
   //   } finally { setLoading(false) }
   // }
 
-  const submitTickets = async () => {
-    setLoading(true); setError('')
-    try {
-      const payload = {
-        totalCount: Number(tickets.totalCount),
-        perCustomerLimit: Number(tickets.perCustomerLimit),
-        groupMinQty: tickets.groupMinQty === '' ? null : Number(tickets.groupMinQty),
-        groupDiscountPercent: tickets.groupDiscountPercent === '' ? null : Number(tickets.groupDiscountPercent),
-        discountEndsAt: tickets.discountEndsAt ? new Date(tickets.discountEndsAt).toISOString() : null
-      }
-      await apiFetch(`/api/events/${eventId}/tickets`, { method: 'POST', body: JSON.stringify(payload) })
-      setStep(3)
-    } catch (e) { setError(e.message || 'Failed to save tickets') } finally { setLoading(false) }
-  }
+  // const submitTickets = async () => {
+  //   setLoading(true); setError('')
+  //   try {
+  //     const payload = {
+  //       totalCount: Number(tickets.totalCount),
+  //       perCustomerLimit: Number(tickets.perCustomerLimit),
+  //       groupMinQty: tickets.groupMinQty === '' ? null : Number(tickets.groupMinQty),
+  //       groupDiscountPercent: tickets.groupDiscountPercent === '' ? null : Number(tickets.groupDiscountPercent),
+  //       discountEndsAt: tickets.discountEndsAt ? new Date(tickets.discountEndsAt).toISOString() : null
+  //     }
+  //     await apiFetch(`/api/events/${eventId}/tickets`, { method: 'POST', body: JSON.stringify(payload) })
+  //     setStep(3)
+  //   } catch (e) { setError(e.message || 'Failed to save tickets') } finally { setLoading(false) }
+  // }
 
-  const uploadImages = async () => {
-    if (!images.length) { setStep(3); return }
-    setLoading(true); setError('')
-    try {
-      const fd = new FormData()
-      images.forEach(f => fd.append('images', f))
-      await apiUpload(`/api/events/${eventId}/images`, fd)
-      setStep(3)
-    } catch (e) { setError(e.message || 'Failed to upload images') } finally { setLoading(false) }
+  // const uploadImages = async () => {
+  //   if (!images.length) { setStep(3); return }
+  //   setLoading(true); setError('')
+  //   try {
+  //     const fd = new FormData()
+  //     images.forEach(f => fd.append('images', f))
+  //     await apiUpload(`/api/events/${eventId}/images`, fd)
+  //     setStep(3)
+  //   } catch (e) { setError(e.message || 'Failed to upload images') } finally { setLoading(false) }
+  // }
+
+  const submitTickets = async () => {
+    console.log("Submitting tickets... called with tickets:", tickets);
+  setLoading(true); 
+  setError('');
+  try {
+    const payload = {
+      totalCount: Number(tickets.totalCount),
+      perCustomerLimit: Number(tickets.perCustomerLimit),
+      groupMinQty: tickets.groupMinQty === '' ? null : Number(tickets.groupMinQty),
+      groupDiscountPercent: tickets.groupDiscountPercent === '' ? null : Number(tickets.groupDiscountPercent),
+      discountEndsAt: tickets.discountEndsAt ? new Date(tickets.discountEndsAt).toISOString() : null
+    };
+
+    const res = await fetch(`http://localhost:3001/api/events/${eventId}/tickets`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'   // ✅ explicitly added
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) throw new Error('Failed to save tickets');
+
+    setStep(3);
+  } catch (e) {
+    setError(e.message || 'Failed to save tickets');
+  } finally {
+    setLoading(false);
   }
+};
+
+
+const uploadImages = async () => {
+  if (!images.length) { 
+    setStep(3); 
+    return; 
+  }
+  setLoading(true); 
+  setError('');
+  try {
+    const fd = new FormData();
+    images.forEach(f => fd.append('images', f));
+
+    const res = await fetch(`http://localhost:3001/api/events/${eventId}/images`, {
+      method: 'POST',
+      // ⚠️ DO NOT set Content-Type here manually (fetch will set correct boundary)
+      body: fd
+    });
+
+    if (!res.ok) throw new Error('Failed to upload images');
+
+    setStep(3);
+  } catch (e) {
+    setError(e.message || 'Failed to upload images');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
