@@ -9,12 +9,12 @@ import StepsSection from '../../components/StepsSection'
 import TestimonialsSection from '../../components/TestimonialsSection'
 import Footer from '../../components/Footer'
 
-export default function Home({ onLogout, onExploreEvents, onCreateEvent }) {
+export default function Home({ onLogout, onExploreEvents, onCreateEvent, onLogin, onSignUp, onNavigateToPricing, onEventClick }) {
   return (
     <div className="pt-[60px] font-Roboto">
-      <Header onLogout={onLogout} onExploreEvents={onExploreEvents} onCreateEvent={onCreateEvent} />
+      <Header onLogout={onLogout} onExploreEvents={onExploreEvents} onCreateEvent={onCreateEvent} onLogin={onLogin} onSignUp={onSignUp} onNavigateToPricing={onNavigateToPricing} />
       <Hero />
-      <EventsSection />
+      <EventsSection onEventClick={onEventClick} />
       <HostEventsSection />
       <FeaturesSection />
       <StepsSection />
