@@ -1,19 +1,23 @@
 'use client'
 
 import Header from '../../components/Header'
-import EventDetailPage from '../../components/EventDetailPage'
+import MyProfilePage from '../../components/MyProfilePage'
 import Footer from '../../components/Footer'
 
-export default function EventDetail({ onLogout, onExploreEvents, onCreateEvent, onCreateVenue, event, onLogin, onSignUp, onNavigateToPricing, onNavigateToBlog, onNavigateToOrganization }) {
+export default function MyProfile({ onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLogin, onSignUp, onNavigateToPricing, onNavigateToBlog, onNavigateToOrganization }) {
   return (
     <div>
       <Header onLogout={onLogout} onExploreEvents={onExploreEvents} onCreateEvent={onCreateEvent} onCreateVenue={onCreateVenue} onLogin={onLogin} onSignUp={onSignUp} onNavigateToPricing={onNavigateToPricing} onNavigateToBlog={onNavigateToBlog} onNavigateToOrganization={onNavigateToOrganization} />
-      <EventDetailPage 
-        event={event}
+      <MyProfilePage 
+        onNavigateToOrganization={onNavigateToOrganization}
         onLogout={onLogout}
         onExploreEvents={onExploreEvents}
         onCreateEvent={onCreateEvent}
         onCreateVenue={onCreateVenue}
+        onLogin={onLogin}
+        onSignUp={onSignUp}
+        onNavigateToPricing={onNavigateToPricing}
+        onNavigateToBlog={onNavigateToBlog}
       />
       <Footer />
     </div>

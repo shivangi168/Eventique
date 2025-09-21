@@ -6,7 +6,7 @@ import { FiChevronDown } from "react-icons/fi";
 
 import { MdLogout } from "react-icons/md";
 
-const Header = ({ onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLogin, onSignUp, onNavigateToPricing }) => {
+const Header = ({ onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLogin, onSignUp, onNavigateToPricing, onNavigateToBlog, onNavigateToOrganization, onNavigateToMyProfile }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRefs = {
     events: useRef(null),
@@ -93,14 +93,25 @@ const Header = ({ onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLog
           {/* Blog Dropdown */}
           <div ref={dropdownRefs.blog} className="relative">
             <button
-              onClick={() => toggleDropdown("blog")}
+              onClick={() => {
+                toggleDropdown("blog");
+                if (onNavigateToBlog) onNavigateToBlog();
+              }}
               className="flex items-center gap-1 hover:text-purple-600"
             >
               Blog <FiChevronDown />
             </button>
             {openDropdown === "blog" && (
               <div className="absolute top-full left-0 mt-2 bg-white shadow-lg border rounded w-40">
-                <a href="#" className="block px-4 py-2 hover:bg-gray-100">Latest Posts</a>
+                <button 
+                  onClick={() => {
+                    setOpenDropdown(null);
+                    if (onNavigateToBlog) onNavigateToBlog();
+                  }}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                >
+                  Latest Posts
+                </button>
                 <a href="#" className="block px-4 py-2 hover:bg-gray-100">Categories</a>
               </div>
             )}
@@ -212,13 +223,19 @@ const Header = ({ onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLog
               <div className="absolute right-0 mt-2 bg-white shadow-lg border rounded w-48">
                 <button 
                   className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
-                  onClick={() => setOpenDropdown(null)}
+                  onClick={() => {
+                    setOpenDropdown(null);
+                    if (onNavigateToMyProfile) onNavigateToMyProfile();
+                  }}
                 >
                   <FaUser /> My Profile
                 </button>
                 <button 
                   className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center gap-2"
-                  onClick={() => setOpenDropdown(null)}
+                  onClick={() => {
+                    setOpenDropdown(null);
+                    if (onNavigateToOrganization) onNavigateToOrganization();
+                  }}
                 >
                   <FaBuilding /> My Organisation
                 </button>
