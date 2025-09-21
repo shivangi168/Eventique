@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaBookmark, FaShare, FaMapMarkerAlt, FaCalendarAlt, FaClock, FaUser, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const EventDetailPage = ({ event, onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onNavigateToCheckout }) => {
+const EventDetailPage = ({ event, onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLogin, onSignUp, onNavigateToCheckout, onNavigateToPricing, onNavigateToBlog, onNavigateToOrganization }) => {
   const [ticketQuantity, setTicketQuantity] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [countdown, setCountdown] = useState({
@@ -123,11 +123,11 @@ const EventDetailPage = ({ event, onLogout, onExploreEvents, onCreateEvent, onCr
   };
 
   const handleBookNow = () => {
-    if (ticketQuantity > 0) {
-      console.log(`Booking ${ticketQuantity} tickets for ${eventData.title}`);
-      if (onNavigateToCheckout) {
-        onNavigateToCheckout(eventData, ticketQuantity);
-      }
+    console.log(`Booking ${ticketQuantity} tickets for ${eventData.title}`);
+    if (onNavigateToCheckout) {
+      onNavigateToCheckout(eventData, ticketQuantity || 1); // Default to 1 ticket if none selected
+    } else {
+      console.error('onNavigateToCheckout function not provided');
     }
   };
 

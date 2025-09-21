@@ -10,12 +10,18 @@ import VenueCreatePage from './create-event/venue/page'
 import EventDetailPage from './event-detail/page'
 import CheckoutPage from './checkout/page'
 import PricingPage from './pricing/page'
+import BlogPage from './blog/page'
+import BlogDetailPage from './blog-detail/page'
+import OrganizationPage from './organization/page'
+import MyProfilePage from './my-profile/page'
 
 export default function RootPage() {
   const [currentPage, setCurrentPage] = useState('home') // Start with home page
   const [selectedEvent, setSelectedEvent] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [checkoutData, setCheckoutData] = useState({ event: null, ticketQuantity: 0 })
+  const [selectedBlog, setSelectedBlog] = useState(null)
+  const [activeSidebarItem, setActiveSidebarItem] = useState('dashboard')
 
   // Check for persistent login state on component mount
   useEffect(() => {
@@ -95,6 +101,37 @@ export default function RootPage() {
     localStorage.setItem('currentPage', 'event-detail')
   }
 
+  const navigateToBlog = () => {
+    setCurrentPage('blog')
+    localStorage.setItem('currentPage', 'blog')
+  }
+
+  const navigateToBlogDetail = (blog) => {
+    setSelectedBlog(blog)
+    setCurrentPage('blog-detail')
+    localStorage.setItem('currentPage', 'blog-detail')
+  }
+
+  const navigateBackToBlog = () => {
+    setCurrentPage('blog')
+    localStorage.setItem('currentPage', 'blog')
+  }
+
+  const navigateToOrganization = () => {
+    setCurrentPage('organization')
+    localStorage.setItem('currentPage', 'organization')
+  }
+
+  const handleSidebarItemClick = (itemId) => {
+    setActiveSidebarItem(itemId)
+    // You can add specific logic for each sidebar item here
+  }
+
+  const navigateToMyProfile = () => {
+    setCurrentPage('my-profile')
+    localStorage.setItem('currentPage', 'my-profile')
+  }
+
   const renderCurrentPage = () => {
     switch (currentPage) {
       case 'home':
@@ -107,6 +144,9 @@ export default function RootPage() {
             onSignUp={navigateToSignUp}
             onNavigateToPricing={navigateToPricing}
             onEventClick={navigateToEventDetail}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
+            onNavigateToMyProfile={navigateToMyProfile}
           />
         )
       case 'discover-events':
@@ -119,6 +159,8 @@ export default function RootPage() {
             onLogin={navigateToLogin}
             onSignUp={navigateToSignUp}
             onNavigateToPricing={navigateToPricing}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
           />
         )
       case 'create-event':
@@ -150,6 +192,8 @@ export default function RootPage() {
             onSignUp={navigateToSignUp}
             onNavigateToCheckout={navigateToCheckout}
             onNavigateToPricing={navigateToPricing}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
           />
         )
       case 'checkout':
@@ -165,6 +209,8 @@ export default function RootPage() {
             onSignUp={navigateToSignUp}
             onBackToEvent={navigateBackToEvent}
             onNavigateToPricing={navigateToPricing}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
           />
         )
       case 'pricing':
@@ -177,6 +223,70 @@ export default function RootPage() {
             onLogin={navigateToLogin}
             onSignUp={navigateToSignUp}
             onNavigateToPricing={navigateToPricing}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
+          />
+        )
+      case 'blog':
+        return (
+          <BlogPage 
+            onLogout={handleLogout}
+            onExploreEvents={navigateToDiscoverEvents}
+            onCreateEvent={navigateToCreateEvent}
+            onCreateVenue={navigateToCreateVenue}
+            onLogin={navigateToLogin}
+            onSignUp={navigateToSignUp}
+            onNavigateToPricing={navigateToPricing}
+            onBlogClick={navigateToBlogDetail}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
+          />
+        )
+      case 'blog-detail':
+        return (
+          <BlogDetailPage 
+            onLogout={handleLogout}
+            onExploreEvents={navigateToDiscoverEvents}
+            onCreateEvent={navigateToCreateEvent}
+            onCreateVenue={navigateToCreateVenue}
+            onLogin={navigateToLogin}
+            onSignUp={navigateToSignUp}
+            onNavigateToPricing={navigateToPricing}
+            blog={selectedBlog}
+            onBackToBlog={navigateBackToBlog}
+            onNavigateToHome={() => window.location.reload()}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
+          />
+        )
+      case 'organization':
+        return (
+          <OrganizationPage 
+            onSidebarItemClick={handleSidebarItemClick}
+            activeSidebarItem={activeSidebarItem}
+            onLogout={handleLogout}
+            onExploreEvents={navigateToDiscoverEvents}
+            onCreateEvent={navigateToCreateEvent}
+            onCreateVenue={navigateToCreateVenue}
+            onLogin={navigateToLogin}
+            onSignUp={navigateToSignUp}
+            onNavigateToPricing={navigateToPricing}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
+          />
+        )
+      case 'my-profile':
+        return (
+          <MyProfilePage 
+            onLogout={handleLogout}
+            onExploreEvents={navigateToDiscoverEvents}
+            onCreateEvent={navigateToCreateEvent}
+            onCreateVenue={navigateToCreateVenue}
+            onLogin={navigateToLogin}
+            onSignUp={navigateToSignUp}
+            onNavigateToPricing={navigateToPricing}
+            onNavigateToBlog={navigateToBlog}
+            onNavigateToOrganization={navigateToOrganization}
           />
         )
       case 'signup':

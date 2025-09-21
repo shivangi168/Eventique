@@ -5,11 +5,12 @@ import { auth } from "../lib/firebase";
 // Default API URL if environment variable is not set
 const DEFAULT_API_URL = 'http://localhost:3001';
 const RAW_API_URL = (process.env.NEXT_PUBLIC_API_URL as unknown as string) as string;
-const API_BASE = (
-  RAW_API_URL && RAW_API_URL !== 'undefined' && RAW_API_URL !== 'null'
-    ? RAW_API_URL
-    : DEFAULT_API_URL
-).replace(/\/+$/, '');
+const API_BASE = 'http://localhost:3001'
+// (
+//   RAW_API_URL && RAW_API_URL !== 'undefined' && RAW_API_URL !== 'null'
+//     ? RAW_API_URL
+//     : DEFAULT_API_URL
+// ).replace(/\/+$/, '');
 
 // Retry configuration
 const MAX_RETRIES = 3;
