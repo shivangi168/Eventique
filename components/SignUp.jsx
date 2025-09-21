@@ -20,15 +20,12 @@ export default function BarrenSignup({ onLogin, onSignUp }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log('Signed up user:', userCredential.user);
-      if (onSignUp) onSignUp();
-    } catch (error) {
-      console.error('Signup error:', error.message);
-      alert(error.message);
+    console.log('Signup attempted with:', { firstName, lastName, email, password });
+    // Redirect to home page after signup without API validation
+    if (onSignUp) {
+      onSignUp();
     }
   };
 

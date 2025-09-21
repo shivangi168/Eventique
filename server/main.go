@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -16,6 +17,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"Eventique/handlers"
+    "Eventique/storage"
 )
 
 func main() {
@@ -79,118 +81,29 @@ func main() {
 		json.NewEncoder(w).Encode(user)
 	})
 
-	// Event management endpoints
+	// Database and repositories
+	db := storage.Connect()
+	defer db.Close()
+
+	// Uploads directory
+	uploadDir := getenv("UPLOAD_DIR", "uploads")
+	if err := os.MkdirAll(uploadDir, 0755); err != nil {
+		log.Fatalf("failed to create upload dir %s: %v", uploadDir, err)
+	}
+
+	// Run migrations (idempotent)
+	if err := runMigrations(db); err != nil {
+		log.Fatalf("failed to run migrations: %v", err)
+	}
+
+	// Mount static files for uploaded images
+	r.Handle("/uploads/*", http.StripPrefix("/uploads/", http.FileServer(http.Dir(uploadDir))))
+
+	// Event management (real handlers with DB)
+	apiEvents := handlers.EventsHandler{Repo: storage.NewEventsRepo(db), UploadDir: uploadDir}
 	r.Route("/api", func(api chi.Router) {
-		// Get all events
-		api.Get("/events", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			events := []map[string]interface{}{
-				{
-					"id":          1,
-					"name":        "Tech Conference 2024",
-					"description": "Annual technology conference",
-					"date":        "2024-01-15",
-					"location":    "San Francisco",
-					"price":       299.99,
-					"category":    "Technology",
-				},
-				{
-					"id":          2,
-					"name":        "Music Festival",
-					"description": "Summer music festival",
-					"date":        "2024-06-20",
-					"location":    "Los Angeles",
-					"price":       150.00,
-					"category":    "Music",
-				},
-				{
-					"id":          3,
-					"name":        "Business Summit",
-					"description": "Business networking event",
-					"date":        "2024-03-10",
-					"location":    "New York",
-					"price":       199.99,
-					"category":    "Business",
-				},
-			}
-			json.NewEncoder(w).Encode(events)
-		})
-
-		// Get single event
-		api.Get("/events/{id}", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			id := chi.URLParam(r, "id")
-			event := map[string]interface{}{
-				"id":          id,
-				"name":        "Event " + id,
-				"description": "Description for event " + id,
-				"date":        "2024-01-15",
-				"location":    "Location " + id,
-				"price":       99.99,
-				"category":    "General",
-			}
-			json.NewEncoder(w).Encode(event)
-		})
-
-		// Create new event
-		api.Post("/events", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			var event map[string]interface{}
-			if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
-				http.Error(w, "Invalid JSON", http.StatusBadRequest)
-				return
-			}
-			
-			// Add ID and timestamp
-			event["id"] = 999
-			event["created_at"] = time.Now().Format(time.RFC3339)
-			
-			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(event)
-		})
-
-		// Update event
-		api.Put("/events/{id}", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			id := chi.URLParam(r, "id")
-			var event map[string]interface{}
-			if err := json.NewDecoder(r.Body).Decode(&event); err != nil {
-				http.Error(w, "Invalid JSON", http.StatusBadRequest)
-				return
-			}
-			
-			event["id"] = id
-			event["updated_at"] = time.Now().Format(time.RFC3339)
-			
-			json.NewEncoder(w).Encode(event)
-		})
-
-		// Delete event
-		api.Delete("/events/{id}", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			id := chi.URLParam(r, "id")
-			response := map[string]interface{}{
-				"message": "Event " + id + " deleted successfully",
-				"id":      id,
-			}
-			json.NewEncoder(w).Encode(response)
-		})
-
-		// Search events
-		api.Get("/events/search", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			query := r.URL.Query().Get("q")
-			category := r.URL.Query().Get("category")
-			
-			response := map[string]interface{}{
-				"query":    query,
-				"category": category,
-				"results": []map[string]interface{}{
-					{"id": 1, "name": "Search Result 1", "category": category},
-					{"id": 2, "name": "Search Result 2", "category": category},
-				},
-			}
-			json.NewEncoder(w).Encode(response)
+		api.Group(func(rg chi.Router) {
+			apiEvents.Routes(rg)
 		})
 	})
 
@@ -295,4 +208,20 @@ func corsMiddleware() func(http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 		})
 	}
+}
+
+// runMigrations applies minimal schema if not present. Safe to run repeatedly.
+func runMigrations(db *sql.DB) error {
+    path := "server/migrations/001_init.sql"
+    b, err := os.ReadFile(path)
+    if err != nil {
+        // If migrations file isn't found, do nothing but log
+        log.Printf("migrations file not found at %s: %v", path, err)
+        return nil
+    }
+    _, err = db.Exec(string(b))
+    if err != nil {
+        return err
+    }
+    return nil
 }
