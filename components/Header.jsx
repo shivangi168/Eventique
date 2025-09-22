@@ -74,7 +74,7 @@ const Header = ({ onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLog
                   setOpenDropdown(null);
                 }}
                 
-                >Venue Event Detail Viewhhhhhhhhhhhhhhhhhhh</a>
+                >Venue Event Detail View</a>
                 <a href="#" className="block px-4 py-2 hover:bg-gray-100">Online Event Detail View</a>
               </div>
             )}
