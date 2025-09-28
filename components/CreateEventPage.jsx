@@ -89,7 +89,7 @@ const CreateEventPage = ({ onCreateVenue }) => {
                     
 
 
-                    Create a Venue Eventtttttttttttttttttttttttttttt
+                    Create a Venue Event
                   </h2>
                   <p className="text-gray-600 leading-relaxed">
                     Organize in-person events at physical venueooooooooooooooooooooooos. Perfect for 
