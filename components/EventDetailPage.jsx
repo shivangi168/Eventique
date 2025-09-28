@@ -3,21 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaBookmark, FaShare, FaMapMarkerAlt, FaCalendarAlt, FaClock, FaUser, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const EventDetailPage = ({ 
-  event, 
-  onLogout, 
-  onExploreEvents, 
-  onCreateEvent, 
-  onCreateVenue, 
-  onLogin, 
-  onSignUp, 
-  onNavigateToCheckout, 
-  onNavigateToPricing, 
-  onNavigateToBlog, 
-  onNavigateToOrganization,
-  onNavigateToMyProfile 
-}) => {
-  const [ticketQuantity, setTicketQuantity] = useState(1); // Start with 1 ticket
+const EventDetailPage = ({ event, onLogout, onExploreEvents, onCreateEvent, onCreateVenue, onLogin, onSignUp, onNavigateToCheckout, onNavigateToPricing, onNavigateToBlog, onNavigateToOrganization }) => {
+  const [ticketQuantity, setTicketQuantity] = useState(0);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [countdown, setCountdown] = useState({
     days: 252,
@@ -47,6 +34,7 @@ const EventDetailPage = ({
           minutes = 59;
           seconds = 59;
         } else {
+          // Reset countdown when it reaches 0
           return {
             days: 252,
             hours: 2,
@@ -62,6 +50,7 @@ const EventDetailPage = ({
     return () => clearInterval(timer);
   }, []);
 
+  // Sample event data - in real app this would come from props or API
   const eventData = event || {
     id: 1,
     title: "Spring Showcase Saturday April 30th 2022 at 7pm",
@@ -77,7 +66,7 @@ const EventDetailPage = ({
     ticketDescription: "2 x pair hand painted leather earrings 1 x glass of bubbles / or coffee Individual grazing box / fruit cup"
   };
 
-  // FIXED: Added the missing similarEvents data
+  // Sample similar events data
   const similarEvents = [
     {
       id: 2,
@@ -125,50 +114,25 @@ const EventDetailPage = ({
   };
 
   const handleShare = () => {
+    // Share functionality
     console.log('Share event');
   };
 
   const handleQuantityChange = (change) => {
-    setTicketQuantity(Math.max(1, ticketQuantity + change)); // Minimum 1 ticket
+    setTicketQuantity(Math.max(0, ticketQuantity + change));
   };
 
-  // FIXED: Better error handling and logging
   const handleBookNow = () => {
-    console.log('Book Now clicked');
-    console.log('Ticket quantity:', ticketQuantity);
-    console.log('Event data:', eventData);
-    console.log('onNavigateToCheckout function:', onNavigateToCheckout);
-    
-    if (onNavigateToCheckout && typeof onNavigateToCheckout === 'function') {
-      console.log('Calling onNavigateToCheckout...');
-      onNavigateToCheckout(eventData, ticketQuantity);
+    console.log(`Booking ${ticketQuantity} tickets for ${eventData.title}`);
+    if (onNavigateToCheckout) {
+      onNavigateToCheckout(eventData, ticketQuantity || 1); // Default to 1 ticket if none selected
     } else {
-      console.error('onNavigateToCheckout function not available or not a function');
-      // Fallback: navigate to login if not logged in
-      if (onLogin) {
-        console.log('Falling back to login');
-        onLogin();
-      }
-    }
-  };
-
-  // FIXED: Simplified navigation functions
-  const handleProfileView = (e) => {
-    if (e) e.stopPropagation();
-    console.log("Profile View Clicked");
-    console.log("onNavigateToMyProfile:", onNavigateToMyProfile);
-    
-    if (onNavigateToMyProfile) {
-      onNavigateToMyProfile();
-    } else {
-      console.error('onNavigateToMyProfile not available');
+      console.error('onNavigateToCheckout function not provided');
     }
   };
 
   const handleBrowseAll = () => {
-    if (onExploreEvents) {
-      onExploreEvents();
-    }
+    onExploreEvents();
   };
 
   return (
@@ -310,10 +274,7 @@ const EventDetailPage = ({
                   <div>
                     <div className="text-sm text-gray-600">Organised by</div>
                     <div className="font-semibold text-gray-900">{eventData.organizer}</div>
-                    <button 
-                      className="text-purple-600 text-sm hover:text-purple-700 transition-colors"
-                      onClick={handleProfileView}
-                    >
+                    <button className="text-purple-600 text-sm hover:text-purple-700 transition-colors">
                       View Profile
                     </button>
                   </div>
