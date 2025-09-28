@@ -13,7 +13,7 @@ export default function Home({ onLogout, onExploreEvents, onCreateEvent, onLogin
   return (
     <div className="pt-[60px] font-Roboto">
       <Header onLogout={onLogout} onExploreEvents={onExploreEvents} onCreateEvent={onCreateEvent} onLogin={onLogin} onSignUp={onSignUp} onNavigateToPricing={onNavigateToPricing} onNavigateToBlog={onNavigateToBlog} onNavigateToOrganization={onNavigateToOrganization} onNavigateToMyProfile={onNavigateToMyProfile} />
-      <Hero />
+      <Hero onCreateEvent={onCreateEvent} />
       <EventsSection onEventClick={onEventClick} />
       <HostEventsSection />
       <FeaturesSection />
