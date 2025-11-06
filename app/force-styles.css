@@ -1,0 +1,144 @@
+/* Force styles to override everything */
+* {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Reset all font sizes to reasonable values */
+* {
+  font-size: 14px !important;
+}
+
+html {
+  font-size: 16px !important;
+}
+
+body {
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+/* Hero section fixes */
+.hero-banner h1 {
+  font-size: 1.5rem !important;
+  line-height: 1.2 !important;
+  margin-bottom: 1rem !important;
+}
+
+.hero-banner p {
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.hero-banner button {
+  font-size: 0.875rem !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.375rem !important;
+}
+
+/* Header fixes */
+header {
+  height: 60px !important;
+  padding: 0.5rem 0 !important;
+}
+
+header .logo {
+  font-size: 1.125rem !important;
+}
+
+header button {
+  font-size: 0.75rem !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+header img {
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+/* Mobile overrides */
+@media (max-width: 768px) {
+  .hero-banner h1 {
+    font-size: 1.25rem !important;
+  }
+  
+  .hero-banner p {
+    font-size: 0.8rem !important;
+  }
+  
+  .hero-banner button {
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.8rem !important;
+  }
+  
+  header {
+    height: 50px !important;
+  }
+  
+  header .logo {
+    font-size: 1rem !important;
+  }
+  
+  header button {
+    font-size: 0.7rem !important;
+    padding: 0.2rem 0.4rem !important;
+  }
+}
+
+/* Force all text to be reasonable size */
+h1, h2, h3, h4, h5, h6 {
+  font-size: 1.25rem !important;
+  line-height: 1.2 !important;
+}
+
+p {
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+}
+
+button {
+  font-size: 0.875rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+/* Override any Tailwind classes that might be causing issues */
+.text-3xl { font-size: 1.5rem !important; }
+.text-4xl { font-size: 1.75rem !important; }
+.text-5xl { font-size: 2rem !important; }
+.text-6xl { font-size: 2.25rem !important; }
+
+/* Force specific element overrides */
+h1, h2, h3, h4, h5, h6 {
+  font-size: 1.25rem !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+p {
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  margin: 0 0 1rem 0 !important;
+}
+
+button {
+  font-size: 0.875rem !important;
+  padding: 0.5rem 1rem !important;
+  border: none !important;
+  border-radius: 0.375rem !important;
+}
+
+/* Force all text elements to be reasonable size */
+span, div, a, li, td, th {
+  font-size: 0.875rem !important;
+}
+
+/* Override any large text classes */
+.text-xl { font-size: 1rem !important; }
+.text-2xl { font-size: 1.125rem !important; }
+.text-3xl { font-size: 1.25rem !important; }
+.text-4xl { font-size: 1.375rem !important; }
+.text-5xl { font-size: 1.5rem !important; }
+.text-6xl { font-size: 1.75rem !important; }
